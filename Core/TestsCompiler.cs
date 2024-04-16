@@ -5,7 +5,7 @@ public class TestsCompiler
     private readonly string _testAttributeIdentifier = "Test";
     private readonly string _classAttributeIdentifier = "TestFixture";
 
-    public CompilationUnitSyntax GenerateCodeByItem(Models.GenerateItem item) =>
+    public CompilationUnitSyntax GenerateCodeByItem(GenerateItem item) =>
         SyntaxFactory
             .CompilationUnit()
             .WithMembers(
@@ -23,12 +23,12 @@ public class TestsCompiler
             .NormalizeWhitespace();
 
     
-    private FileScopedNamespaceDeclarationSyntax GenerateNamespace(Models.GenerateItem item) =>
+    private FileScopedNamespaceDeclarationSyntax GenerateNamespace(GenerateItem item) =>
         SyntaxFactory.FileScopedNamespaceDeclaration(
             SyntaxFactory.IdentifierName($"{item.NamespaceName}.Tests")
         );
 
-    private ClassDeclarationSyntax GenerateClass(Models.GenerateItem item)
+    private ClassDeclarationSyntax GenerateClass(GenerateItem item)
     {
         var list = new List<MemberDeclarationSyntax>();
         foreach (var method in item.Methods)
@@ -72,8 +72,6 @@ public class TestsCompiler
 
     private IdentifierNameSyntax GenerateIdentifierName(string identifier) =>
         SyntaxFactory.IdentifierName(identifier);
-
-    private SyntaxToken GenerateToken(SyntaxKind kind) => SyntaxFactory.Token(kind);
 
     private BlockSyntax GenerateBlock()
     {

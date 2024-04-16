@@ -1,8 +1,8 @@
 namespace Core;
 
-internal class CustomWalker : CSharpSyntaxWalker
+internal class CustomSyntaxWalker : CSharpSyntaxWalker
 {
-    public List<Models.GenerateItem> Items { get; } = new();
+    public List<GenerateItem> Items { get; } = new();
 
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
@@ -11,7 +11,7 @@ internal class CustomWalker : CSharpSyntaxWalker
             var parent = node.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             if(parent != null)
             {
-                var parentItem = Items.FirstOrDefault(i => CompareClassNames(i.ClassItem, parent) == 0);
+                GenerateItem? parentItem = Items.FirstOrDefault(i => CompareClassNames(i.ClassItem, parent) == 0);
                 parentItem?.AddMethod(node);
             }
         }
@@ -20,7 +20,7 @@ internal class CustomWalker : CSharpSyntaxWalker
 
     public override void VisitClassDeclaration(ClassDeclarationSyntax node)
     {
-        Items.Add(new Core.Models.GenerateItem(node));
+        Items.Add(new GenerateItem(node));
         base.VisitClassDeclaration(node);
     }
 
